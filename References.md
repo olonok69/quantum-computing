@@ -2,6 +2,7 @@
 
 Explore a comprehensive list of resources and references to deepen your understanding of quantum computing. Learn about essential tools, tutorials, and research papers from leading technology providers and institutions to support your continued growth in the field.
 
+
 ## Resources
 
 * [D-Wave Docs (quantum annealing)](https://docs.dwavesys.com/)
