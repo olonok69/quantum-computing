@@ -1,84 +1,128 @@
 # Quantum Computing Playground
 
-A hands-on collection of notes, scripts, and notebooks for demystifying quantum computing concepts with approachable analogies and practical code examples.
+A hands-on collection of scripts, notebooks, and notes that explore quantum computing concepts using Qiskit, Cirq, PennyLane, and a custom NumPy-based simulator. This repo mixes beginner-friendly explanations with runnable demos for Grover, Deutsch-Jozsa, Shor (toy example), and state-vector simulation.
 
 ## Repository Map
 
 ```
 .
-├── docs/                     # Narrative guides for non-technical audiences
-├── fundamentals/             # Qiskit circuits and Grover-style search demos
-├── optimize_quantum_circuit/ # PennyLane utilities for variational circuits
-├── simulating/               # NumPy-based gate simulations and linear algebra
-└── Notebook/                 # Exploratory Jupyter notebooks (qOSF tasks)
+├── algorithms/                 # Qiskit-based algorithm snippets
+├── DJ-Algorithm/               # Deutsch-Jozsa in Qiskit and Cirq
+├── docs/                       # Beginner-friendly guides (EN/ES)
+├── fundamentals/               # Grover-style oracle and diffuser demos
+├── Grover/                     # Grover in Qiskit and Cirq
+├── IBM-Quantum-Platform/       # QASM and Qiskit examples for IBM platform
+├── Notebook/                   # Jupyter notebooks (qOSF tasks, random walk)
+├── optimize_quantum_circuit/   # PennyLane cost landscape visualization
+├── shor/                       # Shor (toy N=15) in Qiskit and Cirq
+├── simulating/                 # Custom NumPy simulator + CLI + plots
+├── quantum_results.html        # Plotly output (generated)
+├── grover_circuit.png          # Qiskit Grover circuit output
+├── bell_state_histogram.png    # Qiskit Bell-state histogram output
+└── References.md               # External references and reading list
 ```
 
-## Key Concepts at a Glance
+## Quick Start
 
-For an analogy-first introduction, read [docs/quantum_computing_explained.md](docs/quantum_computing_explained.md). It covers:
+### 1) Create and activate a virtual environment
 
-- **Bits vs qubits:** spinning-coin analogy for superposition and measurement collapse.
-- **Quantum gates:** how rotations, superposition, and entanglement extend classical logic.
-- **Specialized advantage:** why quantum excels at maze-like problems (cryptography, chemistry, optimization) but not everyday browsing or media playback.
-- **Current limitations:** fragility, error rates, and cost that make todays devices niche but promising.
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-## Getting Started
+### 2) Install core dependencies
 
-1. **Create an environment** (Python 3.10+ recommended):
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate   # Windows: .venv\Scripts\activate
-   ```
-2. **Install core dependencies** (tailor as needed for your experiments):
-   ```bash
-   pip install qiskit qiskit-aer matplotlib numpy pennylane
-   ```
-3. **Run an example circuit**:
-   ```bash
-   python fundamentals/main.py
-   ```
-4. **Explore notebooks** by launching VS Code or Jupyter Lab and opening files in `Notebook/` or `optimize_quantum_circuit/`.
+```powershell
+python -m pip install qiskit qiskit-aer cirq pennylane matplotlib numpy plotly
+```
 
-## Project Highlights
+### 3) Run a few demos
 
-### docs/
-- [quantum_computing_explained.md](docs/quantum_computing_explained.md) — Plain-language guide comparing classical vs quantum computing, with tables, analogies (spinning coin, maze, kitchen tools), and real-world impact areas.
-- computacion_cuantica_explicada.md — Spanish translation/work-in-progress to broaden accessibility.
+```powershell
+python fundamentals\main.py
+python Grover\qiskit_grover.py
+python DJ-Algorithm\main_qiskit.py
+python simulating\quantum_simulator.py --visualize
+```
+
+## Documentation
+
+- docs/quantum_computing_explained.md: Plain-language introduction with analogies and use cases.
+- docs/computacion_cuantica_explicada.md: Spanish version of the same guide.
+- README.es.md: Spanish overview of the repo structure and highlights.
+
+## Algorithms and Demos by Folder
+
+### algorithms/
+- bell_state_qiskit.py: Builds a Bell pair, measures it, and saves a histogram to bell_state_histogram.png.
+- beel_state_cirq.py: Cirq-based Bell-state example.
+
+### DJ-Algorithm/
+- main_qiskit.py: Deutsch-Jozsa with a balanced/constant oracle, outputs dj_circuit.png and dj_histogram.png.
+- main.cirq.py: Deutsch-Jozsa in Cirq using a small 3-qubit input + ancilla.
+- dj_circuit.txt: Notes for the circuit layout.
+
+### Grover/
+- qiskit_grover.py: Grover search with a 3-qubit oracle marking |101> and |110>, saves grover_circuit.png.
+- cirq_grover.py: Grover search with a 2-qubit oracle and ancilla, prints sampled results.
+
+### shor/
+- shor_qiskit.py: Shor toy demo for N=15 using Qiskit Aer. Supports CLI parameters for N (fixed to 15 in this demo) and a (one of 2,7,8,11,13).
+  - Example: `python shor\shor_qiskit.py -n 15 -a 7`
+- shor_cirq.py: Shor order-finding circuit using Cirq arithmetic operations. Requires a Cirq version that provides ArithmeticGate support.
 
 ### fundamentals/
-- [main.py](fundamentals/main.py) builds a Grover-style satisfiability oracle around the helper `XOR` function, applies a custom diffuser, and simulates the circuit via Qiskit Aer. Results are saved to `fundamentals/output/my_circuit.png` for quick inspection.
-
-### simulating/
-- [operations.py](simulating/operations.py) demonstrates how to express qubit states, Hadamard gates, CNOT variations, and custom multi-qubit operators using raw NumPy. Its a lightweight sandbox for understanding tensors without a full framework.
-- Additional scripts (`apply_gates.py`, `code_gates.py`, `code_numpy.py`) extend these experiments into reusable helpers.
+- main.py: Builds a Grover-style SAT oracle (XOR clauses), a diffuser, and runs the circuit in Aer. Saves a histogram to fundamentals/output/my_circuit.png.
 
 ### optimize_quantum_circuit/
-- [surface_plot.py](optimize_quantum_circuit/surface_plot.py) visualizes PennyLane cost landscapes by rendering 3D wireframes plus optimization trajectories (e.g., Adam optimizer paths) for two-parameter variational circuits.
-- `hello_pennylane.ipynb` offers an interactive notebook to tweak templates and optimizers.
+- surface_plot.py: PennyLane-based cost-landscape visualization and optimizer trajectories.
+- hello_pennylane.ipynb: Interactive notebook for variational circuits and optimizers.
+
+### simulating/
+- quantum_simulator.py: A full-featured NumPy simulator with CLI and Plotly visualizations.
+- examples.py: Multiple prebuilt circuits.
+- QUICKSTART.md and README.md: Usage, CLI arguments, and troubleshooting.
+
+### IBM-Quantum-Platform/
+- DJ-Algorithm/openqasm-dj.qasm: OpenQASM version of Deutsch-Jozsa.
+- DJ-Algorithm/qiskit-dj.py: Qiskit implementation for IBM platform.
+- Grover/qiskit-grover.py and qiskit-grover.qasm: Grover in Qiskit and QASM.
 
 ### Notebook/
-- `qosf-simulator-task.ipynb` documents work toward the Quantum Open Source Foundation mentorship challenge, showcasing simulator use and custom tasks.
+- qosf-simulator-task.ipynb: Notes and experiments for the QOSF task.
+- quantum_random_walk.ipynb: Random walk exploration notebook.
 
-## Suggested Workflow
+## Custom Simulator (simulating/)
 
-1. **Absorb the intuition** in `docs/` to align on mental models.
-2. **Simulate with NumPy** in `simulating/` to cement linear algebra fundamentals.
-3. **Scale up with Qiskit** via `fundamentals/` to build oracles and visualize measurement outcomes.
-4. **Experiment with variational circuits** using PennyLane utilities inside `optimize_quantum_circuit/`.
-5. **Document learnings** or new demos back into `docs/` or `Notebook/` for future collaborators.
+The custom simulator supports a compact circuit string format:
+
+```
+python simulating\quantum_simulator.py -q 3 -s 1500 -c "h:0,h:1,cx:0-2,cx:1-2,x:0" --visualize
+```
+
+Gates supported: h, x, y, z, s, t, i, cx.
+
+Outputs include an interactive Plotly dashboard saved as quantum_results.html with:
+- Measurement counts
+- State vector amplitudes
+- Theoretical probabilities
+- Measured vs theoretical comparison
+
+## Notes on Versions
+
+- Qiskit Aer is a separate package (qiskit-aer). The Qiskit demos use AerSimulator in newer versions.
+- The Cirq Shor demo relies on ArithmeticGate support. If you see an error about arithmetic operations, upgrade Cirq.
 
 ## Contributing
 
-- Keep prose approachable; favor analogies and visuals for new learners.
-- When adding code, include brief comments describing the quantum workflow or mathematical intent.
-- Share simulator outputs (plots, histograms) in `fundamentals/output/` or dedicated `output/` folders to keep results reproducible without rerunning heavy jobs.
+- Keep explanations approachable and concrete.
+- Add small comments for non-obvious quantum steps.
+- Place generated images and plots next to their related scripts or in output/ folders.
 
-## Roadmap Ideas
+## References
 
-- Expand the Spanish documentation to parity with the English guide.
-- Add tests or utility scripts for benchmarking gate implementations in `simulating/`.
-- Include PennyLane/Qiskit hybrid examples that showcase variational algorithms on simulators.
-- Document setup steps for running notebooks on real quantum hardware backends when available.
-
-# links
-- https://jonathan-hui.medium.com/qc-programming-with-quantum-gates-8996b667d256
+- References.md for curated reading.
+- Qiskit documentation: https://docs.quantum.ibm.com/
+- Cirq documentation: https://quantumai.google/cirq
+- PennyLane documentation: https://pennylane.ai/
